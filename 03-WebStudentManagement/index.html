@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Manajemen Mahasiswa</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fa-solid fa-graduation-cap"></i>  
+            <span>Database<strong> IF-ITS</strong></span>
+        </div>
+        <div class="nav-menu">
+            <a href="#" class="active"><i class="fa-solid fa-file-invoice"></i> Formulir</a>
+            <a href="#"><i class="fa-solid fa-users"></i> Data Mahasiswa</a>
+            <a href="#"><i class="fa-solid fa-info-circle"></i> About</a>
+        </div>
+        <div class="nav-user">
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <section class="card form-card">
+            <div class="card-header">
+                <h2 id="form-title"><i class="fa-solid fa-user"></i> Formulir Mahasiswa</h2>
+            </div>
+
+            <form id="student-form">
+                <input type="hidden" id="student-id">
+
+                <div class="form-group">
+                    <label for="NRP">NRP</label>
+                    <input type="text" id="NRP" placeholder="Contoh: 5025251000" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama lengkap" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="nrp@student.its.ac.id" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="prodi">Program Studi</label>
+                    <select id="prodi" required>
+                        <option value="">-- Pilih Program Studi --</option>
+                        <option value="Teknik Informatika">Teknik Informatika</option>
+                        <option value="Rekayasa Kecerdasan Artifisial">Rekayasa Kecerdasan Artifisial</option>
+                        <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status Akademik</label>
+                    <select id="status" required>
+                        <option value="Aktif">Aktif</option>
+                        <option value="Cuti">Cuti</option>
+                        <option value="Lulus">Lulus</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="btn-save">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan Data
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btn-reset">
+                        <i class="fa-solid fa-rotate-left"></i> Batal
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="card table-card">
+            
+            <div class="table-header-wrapper">
+                <div class="table-title">
+                    <h2><i class="fa-solid fa-list"></i> Daftar Mahasiswa</h2>
+                    <span class="badge-count" id="total-badge">Total: 0</span>
+                </div>
+
+                <div class="filter-controls">
+                    <select id="filter-prodi" class="select-filter">
+                        <option value="">Semua Prodi</option>
+                        <option value="Teknik Informatika">Teknik Informatika</option>
+                        <option value="Rekayasa Kecerdasan Artifisial">Rekayasa Kecerdasan Artifisial</option>
+                        <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+                    </select>
+
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Cari Nama / NRP...">
+                        <button type="button" class="btn btn-primary" id="btn-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NRP</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Prodi</th>
+                            <th>Status</th>
+                            <th style="text-align: center;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-table-body">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
