@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dynamic Drop Down List</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 40px 16px;
+        background: #f3f4f6;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #444;
+      }
+
+      .card {
+        max-width: 440px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 24px 30px 30px;
+        border-radius: 6px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 22px;
+        color: #222;
+        margin: 0 0 18px;
+      }
+
+      label {
+        display: block;
+        margin: 14px 0 6px;
+        font-size: 15px;
+      }
+
+      select {
+        width: 100%;
+        padding: 10px;
+        font-size: 13px;
+        border: 1px solid #d0d5dd;
+        border-radius: 4px;
+        background: #fff;
+      }
+
+      select:focus {
+        outline: none;
+        border-color: #0b5aa8;
+      }
+
+      select:disabled {
+        background: #f3f4f6;
+        color: #999;
+      }
+
+      .nav {
+        max-width: 440px;
+        margin: 16px auto 0;
+        padding: 12px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+        display: flex;
+        gap: 8px;
+      }
+
+      .nav a {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+        color: #0b5aa8;
+        text-decoration: none;
+        border: 1px solid #0b5aa8;
+        border-radius: 4px;
+      }
+
+      .nav a:hover {
+        background: #0b5aa8;
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>Dynamic Drop Down List</h1>
+
+      <label for="jenis">Jenis Produk</label>
+      <select id="jenis">
+        <option value="">Pilih Jenis Produk</option>
+      </select>
+
+      <label for="merk">Merk</label>
+      <select id="merk" disabled>
+        <option value="">Pilih Merk</option>
+      </select>
+    </div>
+
+    <script>
+      const dataProduk = {
+        "Desktop": ["Asus", "Acer", "HP", "Dell", "Lenovo", "MSI"],
+        "Laptop": ["Asus", "Acer", "HP", "Dell", "Lenovo", "Apple MacBook", "MSI"],
+        "Smartphone": ["iPhone", "Samsung", "Xiaomi", "Oppo", "Vivo", "Realme", "Infinix"]
+      };
+      const selJenis = document.getElementById("jenis");
+      const selMerk = document.getElementById("merk");
+      Object.keys(dataProduk).forEach(jenis => {
+        const opt = document.createElement("option");
+        opt.value = jenis;
+        opt.textContent = jenis;
+        selJenis.appendChild(opt);
+      });
+      selJenis.addEventListener("change", () => {
+        selMerk.innerHTML = '<option value="">Pilih Merk</option>';
+        const daftar = dataProduk[selJenis.value] || [];
+        daftar.forEach(merk => {
+          const opt = document.createElement("option");
+          opt.value = merk;
+          opt.textContent = merk;
+          selMerk.appendChild(opt);
+        });
+        selMerk.disabled = daftar.length === 0;
+      });
+    </script>
+    <div class="nav">
+      <a href="registrasi.html">Registrasi</a>
+      <a href="kodePos.html">Kode Pos</a>
+      <a href="dropdown.html">Dropdown</a>
+    </div>
+  </body>
+
+</html>

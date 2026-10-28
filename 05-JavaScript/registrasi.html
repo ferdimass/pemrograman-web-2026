@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="id">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registrasi Mahasiswa</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 40px 16px;
+        background: #f3f4f6;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #444;
+      }
+
+      .card {
+        max-width: 440px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 24px 30px 30px;
+        border-radius: 6px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 22px;
+        color: #222;
+        margin: 0 0 18px;
+      }
+
+      label {
+        display: block;
+        margin: 14px 0 6px;
+        font-size: 15px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        font-size: 13px;
+        border: 1px solid #d0d5dd;
+        border-radius: 4px;
+        background: #fff;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #0b5aa8;
+      }
+
+      .error {
+        color: #c0392b;
+        font-size: 12px;
+        margin-top: 4px;
+        min-height: 0;
+      }
+
+      .invalid {
+        border-color: #c0392b;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 22px;
+        padding: 12px;
+        background: #0b5aa8;
+        color: #fff;
+        font-size: 15px;
+        border: 0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #094a8a;
+      }
+
+      .field {
+        position: relative;
+      }
+
+      .saran {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        z-index: 5;
+        background: #fff;
+        border: 1px solid #d0d5dd;
+        border-top: 0;
+        border-radius: 0 0 4px 4px;
+        max-height: 180px;
+        overflow-y: auto;
+        display: none;
+      }
+
+      .saran div {
+        padding: 8px 10px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .saran div:hover {
+        background: #eef3fa;
+      }
+
+      .saran small {
+        color: #888;
+        margin-left: 6px;
+      }
+
+      .sukses {
+        display: none;
+        margin-top: 16px;
+        padding: 10px;
+        background: #eaf6ec;
+        color: #256c35;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .nav {
+        max-width: 440px;
+        margin: 16px auto 0;
+        padding: 12px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+        display: flex;
+        gap: 8px;
+      }
+
+      .nav a {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+        color: #0b5aa8;
+        text-decoration: none;
+        border: 1px solid #0b5aa8;
+        border-radius: 4px;
+      }
+
+      .nav a:hover {
+        background: #0b5aa8;
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>Registrasi Mahasiswa</h1>
+      <form id="form" novalidate>
+        <label for="nama">Nama Mahasiswa</label>
+        <div class="field">
+          <input type="text" id="nama" placeholder="Masukkan Nama" autocomplete="off">
+          <div class="saran" id="saran"></div>
+        </div>
+        <div class="error" id="err-nama"></div>
+
+        <label for="email">Email</label>
+        <input type="text" id="email" placeholder="Email Aktif">
+        <div class="error" id="err-email"></div>
+
+        <label for="nrp">NRP</label>
+        <input type="text" id="nrp" placeholder="Masukkan NRP" maxlength="10" inputmode="numeric">
+        <div class="error" id="err-nrp"></div>
+
+        <label for="matkul">Mata Kuliah</label>
+        <input type="text" id="matkul" placeholder="Masukkan Mata Kuliah">
+        <div class="error" id="err-matkul"></div>
+
+        <label for="dosen">Dosen Pengampu</label>
+        <input type="text" id="dosen" placeholder="Masukkan Nama Dosen">
+        <div class="error" id="err-dosen"></div>
+
+        <button type="submit">Submit</button>
+      </form>
+      <div class="sukses" id="sukses">Registrasi berhasil disimpan.</div>
+    </div>
+
+    <script>
+      const dataMahasiswa = [{
+          "nrp": "5025251001",
+          "nama": "Naura Rizky Ameira"
+        },
+        {
+          "nrp": "5025251002",
+          "nama": "Muhammad Faris Alfarrel"
+        },
+        {
+          "nrp": "5025251004",
+          "nama": "Ahmad Faruq Azzam"
+        },
+        {
+          "nrp": "5025251005",
+          "nama": "Ahmad Farras Favian Al Efasi"
+        },
+        {
+          "nrp": "5025251006",
+          "nama": "Farras Al Ghifari"
+        },
+        {
+          "nrp": "5025251009",
+          "nama": "Athar Rozy Rasyidan"
+        },
+        {
+          "nrp": "5025251010",
+          "nama": "Agile Octa Agrakha Handrian"
+        },
+        {
+          "nrp": "5025251011",
+          "nama": "Dzulfiqar Rafi'ussunnah"
+        },
+        {
+          "nrp": "5025251012",
+          "nama": "Khumaidy Syafiq El Maududy"
+        },
+        {
+          "nrp": "5025251013",
+          "nama": "Nisrina Zahralilla"
+        },
+        {
+          "nrp": "5025251014",
+          "nama": "Padhang Abiyu Fikri"
+        },
+        {
+          "nrp": "5025251015",
+          "nama": "Renato Kiran Arisandi"
+        },
+        {
+          "nrp": "5025251016",
+          "nama": "Keven John Gondowardojo"
+        },
+        {
+          "nrp": "5025251017",
+          "nama": "Wafi Fawwaz Sutisna"
+        },
+        {
+          "nrp": "5025251018",
+          "nama": "Farrel Marvellino Sugianto"
+        },
+        {
+          "nrp": "5025251019",
+          "nama": "Fakhrian Elanta"
+        },
+        {
+          "nrp": "5025251020",
+          "nama": "Firsto Al Kautsar Jagad Kurniaji"
+        },
+        {
+          "nrp": "5025251021",
+          "nama": "Yahdilil Haq Sarifuddin"
+        },
+        {
+          "nrp": "5025251022",
+          "nama": "Ahmad Radho Alfariz"
+        },
+        {
+          "nrp": "5025251023",
+          "nama": "Chairunnisa` Tsabitah"
+        },
+        {
+          "nrp": "5025251024",
+          "nama": "Rinaltra Nabasa Simanungkalit"
+        },
+        {
+          "nrp": "5025251025",
+          "nama": "Elba Galuh Hardiyanti"
+        },
+        {
+          "nrp": "5025251027",
+          "nama": "Hadryan Rizky Dimas Saputra"
+        },
+        {
+          "nrp": "5025251028",
+          "nama": "Julianda Caesar Prakoso"
+        },
+        {
+          "nrp": "5025251031",
+          "nama": "Najwan Sigit Cahya Buana"
+        },
+        {
+          "nrp": "5025251032",
+          "nama": "Nagita Aliya Sanopa"
+        },
+        {
+          "nrp": "5025251033",
+          "nama": "Jeremee Rafael Wynn"
+        },
+        {
+          "nrp": "5025251034",
+          "nama": "Ferdyan Dimas Satria"
+        },
+        {
+          "nrp": "5025251035",
+          "nama": "Aston Justin Holiwono"
+        },
+        {
+          "nrp": "5025251036",
+          "nama": "Darwisy Ahmad Alfayyadl"
+        },
+        {
+          "nrp": "5025251037",
+          "nama": "Hasan Mohammadi"
+        },
+        {
+          "nrp": "5025251038",
+          "nama": "Jovan Steve Antony"
+        },
+        {
+          "nrp": "5025251039",
+          "nama": "Benedictus Imanuel Wicaksono"
+        },
+        {
+          "nrp": "5025251040",
+          "nama": "Nurmaida Intan Permadani"
+        },
+        {
+          "nrp": "5025251041",
+          "nama": "Muhammad Adinata Parikesit"
+        },
+        {
+          "nrp": "5025251042",
+          "nama": "Yulius Restu Putranto"
+        },
+        {
+          "nrp": "5025251043",
+          "nama": "Tri Zuyyina Rohmah"
+        },
+        {
+          "nrp": "5025251045",
+          "nama": "Khalisya Zahra Putria Rahman"
+        },
+        {
+          "nrp": "5025251046",
+          "nama": "Muhammad Fairuz Ananta"
+        },
+        {
+          "nrp": "5025251047",
+          "nama": "Akhmad Fahmi"
+        },
+        {
+          "nrp": "5025251048",
+          "nama": "Rado Putra Yustisiawan"
+        },
+        {
+          "nrp": "5025251049",
+          "nama": "Husna 'Akifah"
+        },
+        {
+          "nrp": "5025251050",
+          "nama": "Muhammad Fajrul Hakam"
+        },
+        {
+          "nrp": "5025251051",
+          "nama": "Andra Safir Gemintang"
+        },
+        {
+          "nrp": "5025251052",
+          "nama": "Hilmy Fausta Pratama"
+        },
+        {
+          "nrp": "5025251053",
+          "nama": "M. Haziq Ridwan Parsa"
+        },
+        {
+          "nrp": "5025251054",
+          "nama": "Earlang Rangga Purwanto"
+        },
+        {
+          "nrp": "5025251055",
+          "nama": "Aga Nafta Filadelfiano"
+        },
+        {
+          "nrp": "5025251056",
+          "nama": "Sulthaan Daffaa'hadiansyach"
+        },
+        {
+          "nrp": "5025251057",
+          "nama": "Gabriella Putri Atmaja Adi"
+        },
+        {
+          "nrp": "5025251058",
+          "nama": "Shine Lee Romenzio Tarigan"
+        },
+        {
+          "nrp": "5025251059",
+          "nama": "Arsya Argananta"
+        },
+        {
+          "nrp": "5025251060",
+          "nama": "Sanchia Revana Koasasi"
+        },
+        {
+          "nrp": "5025251061",
+          "nama": "Bayu Setyo Nugroho"
+        },
+        {
+          "nrp": "5025251062",
+          "nama": "Aisyah Putri Diza"
+        },
+        {
+          "nrp": "5025251063",
+          "nama": "Lina Mushlihah"
+        },
+        {
+          "nrp": "5025251064",
+          "nama": "Mas Ayu Lana Afiah"
+        },
+        {
+          "nrp": "5025251065",
+          "nama": "Rida Izzati Azzahra"
+        },
+        {
+          "nrp": "5025251066",
+          "nama": "Nabil Khairie"
+        },
+        {
+          "nrp": "5025251067",
+          "nama": "Azka Fairus Syamsa"
+        },
+        {
+          "nrp": "5025251068",
+          "nama": "Satya Mahardika Sandyaditama"
+        },
+        {
+          "nrp": "5025251069",
+          "nama": "Evannio Michael Christeben Putra"
+        },
+        {
+          "nrp": "5025251070",
+          "nama": "Pandutama Putra Difira"
+        },
+        {
+          "nrp": "5025251071",
+          "nama": "Nasywa Zhafirah"
+        },
+        {
+          "nrp": "5025251072",
+          "nama": "Deborah Amalia Sheraviningrum"
+        },
+        {
+          "nrp": "5025251073",
+          "nama": "Ilham Husni Pratama"
+        },
+        {
+          "nrp": "5025251075",
+          "nama": "Muhammad Naufal Syahputra"
+        },
+        {
+          "nrp": "5025251076",
+          "nama": "Muhammad Faqih"
+        },
+        {
+          "nrp": "5025251077",
+          "nama": "Bastian Gerry Simangunsong"
+        },
+        {
+          "nrp": "5025251078",
+          "nama": "Muhammad Dida Pandawa"
+        },
+        {
+          "nrp": "5025251079",
+          "nama": "Isham Hawali Arijuddin"
+        },
+        {
+          "nrp": "5025251080",
+          "nama": "Kevin Jonathan Messakh"
+        },
+        {
+          "nrp": "5025251081",
+          "nama": "Luthfir Rizqy Fathullah Hanggi"
+        },
+        {
+          "nrp": "5025251082",
+          "nama": "M. Aqsha Syadindha Putra"
+        },
+        {
+          "nrp": "5025251083",
+          "nama": "Tubagus Muhamad Afif"
+        },
+        {
+          "nrp": "5025251084",
+          "nama": "Radhit Akriandra"
+        },
+        {
+          "nrp": "5025251087",
+          "nama": "Zakary Nareswara Tulus Sinudewangga Hatmadipura"
+        },
+        {
+          "nrp": "5025251088",
+          "nama": "I Komang Bagus Alvero Wisnawa"
+        },
+        {
+          "nrp": "5025251089",
+          "nama": "Nabila Zalfaa Putri Hamid"
+        },
+        {
+          "nrp": "5025251090",
+          "nama": "Nailla Chrysant Jelita"
+        },
+        {
+          "nrp": "5025251091",
+          "nama": "Mumtaz Hanumi Fayazida"
+        },
+        {
+          "nrp": "5025251092",
+          "nama": "Dhia Hiroyuki Prawira"
+        },
+        {
+          "nrp": "5025251093",
+          "nama": "Muhammad Hanif Musyafa"
+        },
+        {
+          "nrp": "5025251094",
+          "nama": "I Gusti Agung Wijnana Aryasa"
+        },
+        {
+          "nrp": "5025251095",
+          "nama": "Alessandro Almaz Filemon"
+        },
+        {
+          "nrp": "5025251096",
+          "nama": "Gabriel Mesly Managam Siahaan"
+        },
+        {
+          "nrp": "5025251097",
+          "nama": "Caroline Alverina"
+        },
+        {
+          "nrp": "5025251098",
+          "nama": "Wistara Banyu Kayana"
+        },
+        {
+          "nrp": "5025251099",
+          "nama": "Faris Rashid Azizi"
+        },
+        {
+          "nrp": "5025251100",
+          "nama": "Yudith Hafiz Rabbani"
+        },
+        {
+          "nrp": "5025251101",
+          "nama": "Ayudya Devina Azzahra"
+        },
+        {
+          "nrp": "5025251102",
+          "nama": "Muhammad Ludaka Firdaus"
+        },
+        {
+          "nrp": "5025251103",
+          "nama": "Rafifah Nabil Rahmadian"
+        },
+        {
+          "nrp": "5025251104",
+          "nama": "Amanda Putri Chaerunnisa"
+        },
+        {
+          "nrp": "5025251105",
+          "nama": "Gita Renada"
+        },
+        {
+          "nrp": "5025251106",
+          "nama": "Asher Yedijah Hoesono"
+        },
+        {
+          "nrp": "5025251107",
+          "nama": "Dimas Adiyaksa"
+        },
+        {
+          "nrp": "5025251108",
+          "nama": "Dimas Maulana Putra"
+        },
+        {
+          "nrp": "5025251109",
+          "nama": "Marveilleux Putra Mahasura"
+        },
+        {
+          "nrp": "5025251110",
+          "nama": "Muhammad Fauzta Putra Kavie"
+        },
+        {
+          "nrp": "5025251111",
+          "nama": "Ahmad Rafli Syarif Attallah"
+        },
+        {
+          "nrp": "5025251112",
+          "nama": "Faizaturrahmah Baity"
+        },
+        {
+          "nrp": "5025251113",
+          "nama": "Dewa Fitrah Fakhrusy Imron"
+        },
+        {
+          "nrp": "5025251114",
+          "nama": "Sheila Alvina Tsabita"
+        },
+        {
+          "nrp": "5025251115",
+          "nama": "Rayyan Aura Rahman"
+        },
+        {
+          "nrp": "5025251116",
+          "nama": "Moh. Zidan Ilmi Alwi"
+        },
+        {
+          "nrp": "5025251117",
+          "nama": "Faeyzar Ahnaf Musyarri"
+        },
+        {
+          "nrp": "5025251118",
+          "nama": "Anang Ardhiansyah"
+        },
+        {
+          "nrp": "5025251120",
+          "nama": "Alogo Hasiholan Napitupulu"
+        },
+        {
+          "nrp": "5025251121",
+          "nama": "Haidar Abiyyu At Taqy"
+        },
+        {
+          "nrp": "5025251122",
+          "nama": "Maida Aqillah Putri Nurandani"
+        },
+        {
+          "nrp": "5025251124",
+          "nama": "Muhammad Alhady Rizq"
+        },
+        {
+          "nrp": "5025251125",
+          "nama": "Muhammad Afzal Fulvian Handoni"
+        },
+        {
+          "nrp": "5025251126",
+          "nama": "Budiman Setiono"
+        },
+        {
+          "nrp": "5025251129",
+          "nama": "Muhammad Brahmana Priambudi"
+        },
+        {
+          "nrp": "5025251130",
+          "nama": "Aziz Alfarisi"
+        },
+        {
+          "nrp": "5025251131",
+          "nama": "Muhammad Azka Asyrafany"
+        },
+        {
+          "nrp": "5025251132",
+          "nama": "Kyla Rahma Maulida"
+        },
+        {
+          "nrp": "5025251133",
+          "nama": "Garda Putra Brahmantya"
+        },
+        {
+          "nrp": "5025251134",
+          "nama": "Althea Rahmania Fitri"
+        },
+        {
+          "nrp": "5025251135",
+          "nama": "Gadhiza Edgina Ikhwana Putri"
+        },
+        {
+          "nrp": "5025251136",
+          "nama": "Yudhistira Eka Pratama"
+        },
+        {
+          "nrp": "5025251137",
+          "nama": "Rayyan Aqsha Raditya"
+        },
+        {
+          "nrp": "5025251138",
+          "nama": "Farrel Satria Mukti"
+        },
+        {
+          "nrp": "5025251139",
+          "nama": "Gita Aulia"
+        },
+        {
+          "nrp": "5025251140",
+          "nama": "Tristan Athala Rizqullah Al Farisi"
+        },
+        {
+          "nrp": "5025251141",
+          "nama": "Muhammad Fahmi Ilmi"
+        },
+        {
+          "nrp": "5025251142",
+          "nama": "Rafi Atha Maulana"
+        },
+        {
+          "nrp": "5025251143",
+          "nama": "Ahmad Fakhrul Bawani"
+        },
+        {
+          "nrp": "5025251144",
+          "nama": "Muhammad Raihan Ar Royyan Daryanto"
+        },
+        {
+          "nrp": "5025251145",
+          "nama": "Raffa Atha Maulana"
+        },
+        {
+          "nrp": "5025251146",
+          "nama": "Febrian Ananda Tjahjono"
+        },
+        {
+          "nrp": "5025251147",
+          "nama": "Nicholaus Ardian Nugraha"
+        },
+        {
+          "nrp": "5025251148",
+          "nama": "Rahmavida Novita Setiani"
+        },
+        {
+          "nrp": "5025251149",
+          "nama": "Putu Pradipta Ananda"
+        },
+        {
+          "nrp": "5025251150",
+          "nama": "Made Joshua Ama Ede"
+        },
+        {
+          "nrp": "5025251151",
+          "nama": "Komang Mahatma Langendria"
+        },
+        {
+          "nrp": "5025251152",
+          "nama": "Dewa Ngakan Putu Sunyananda Triyanca"
+        },
+        {
+          "nrp": "5025251153",
+          "nama": "I Gede Made Adi Putra Adnyana"
+        },
+        {
+          "nrp": "5025251154",
+          "nama": "Boy Steven Benaya Aritonang"
+        },
+        {
+          "nrp": "5025251155",
+          "nama": "Wanhardo Jawak"
+        },
+        {
+          "nrp": "5025251156",
+          "nama": "Valian Athalla Syahputra"
+        },
+        {
+          "nrp": "5025251158",
+          "nama": "Aditya Lingga Mardika"
+        },
+        {
+          "nrp": "5025251159",
+          "nama": "Maulana Anugra Putra"
+        },
+        {
+          "nrp": "5025251160",
+          "nama": "Vania Aisha Rohmawati"
+        },
+        {
+          "nrp": "5025251161",
+          "nama": "Rizqi Arya Kuskhilbyano"
+        },
+        {
+          "nrp": "5025251166",
+          "nama": "Muhammad Kholid Zulfikar"
+        },
+        {
+          "nrp": "5025251167",
+          "nama": "Gabriela Asima Nainggolan"
+        },
+        {
+          "nrp": "5025251168",
+          "nama": "Lina Fatima Azzahra Badr"
+        },
+        {
+          "nrp": "5025251169",
+          "nama": "I Gusti Agung Candra Nugraha"
+        },
+        {
+          "nrp": "5025251170",
+          "nama": "Hussein Mohammad Mahsun"
+        },
+        {
+          "nrp": "5025251171",
+          "nama": "Daniel Pedrosaputra"
+        },
+        {
+          "nrp": "5025251172",
+          "nama": "Zainab Ammar Zahra"
+        },
+        {
+          "nrp": "5025251174",
+          "nama": "Marco Marcelino"
+        },
+        {
+          "nrp": "5025251175",
+          "nama": "Rafif Athalail Y"
+        },
+        {
+          "nrp": "5025251176",
+          "nama": "Kevinansyah Salviano Rachmadewa"
+        },
+        {
+          "nrp": "5025251177",
+          "nama": "Fathan Nurtamam Amry"
+        },
+        {
+          "nrp": "5025251178",
+          "nama": "Fazli Irham Ramadhan Abdillah"
+        },
+        {
+          "nrp": "5025251179",
+          "nama": "Muhammad Faiz Haq"
+        },
+        {
+          "nrp": "5025251181",
+          "nama": "Chaniel Daniello Junitona Tarigan"
+        },
+        {
+          "nrp": "5025251182",
+          "nama": "Yesenia Valencia Wibowo"
+        },
+        {
+          "nrp": "5025251183",
+          "nama": "Aditya Hariyadi Tjtujitno"
+        },
+        {
+          "nrp": "5025251184",
+          "nama": "Claresta Amelinda Hutauruk"
+        },
+        {
+          "nrp": "5025251185",
+          "nama": "Muhammad Irsyad Prihasto"
+        },
+        {
+          "nrp": "5025251187",
+          "nama": "Farrel Rizqi Pangestu"
+        },
+        {
+          "nrp": "5025251188",
+          "nama": "Novaldi Rayhan Asshiddiqi"
+        },
+        {
+          "nrp": "5025251189",
+          "nama": "Putu Dylan Pryana"
+        },
+        {
+          "nrp": "5025251190",
+          "nama": "Sayyid Faiz Al Izzuddin"
+        },
+        {
+          "nrp": "5025251191",
+          "nama": "Salsabila Hana Adniah"
+        },
+        {
+          "nrp": "5025251193",
+          "nama": "Raihan Naufal Ramadhan"
+        },
+        {
+          "nrp": "5025251194",
+          "nama": "I Nyoman Gede Anargya Sean Budhi Yasa"
+        },
+        {
+          "nrp": "5025251195",
+          "nama": "Dafa Dega Wijaya"
+        },
+        {
+          "nrp": "5025251196",
+          "nama": "I Dewa Gede Putra Susila"
+        },
+        {
+          "nrp": "5025251198",
+          "nama": "Bryan Darrick Pangedi"
+        },
+        {
+          "nrp": "5025251199",
+          "nama": "Muhammad Aqsan"
+        },
+        {
+          "nrp": "5025251200",
+          "nama": "Rafi Eka Pramudya"
+        },
+        {
+          "nrp": "5025251201",
+          "nama": "Fadlie Akbar Indrianto"
+        },
+        {
+          "nrp": "5025251202",
+          "nama": "Fawwas Razzan Sulfi Andreyawan"
+        },
+        {
+          "nrp": "5025251203",
+          "nama": "Muhammad Aqilah Arianto"
+        },
+        {
+          "nrp": "5025251204",
+          "nama": "Althof Rahmatullah"
+        },
+        {
+          "nrp": "5025251205",
+          "nama": "I Made Saskara Bawa"
+        },
+        {
+          "nrp": "5025251206",
+          "nama": "Rexa Matutu Harsaputra"
+        },
+        {
+          "nrp": "5025251207",
+          "nama": "Kezia Livina"
+        },
+        {
+          "nrp": "5025251208",
+          "nama": "Rafifah Rahmah Admayana"
+        },
+        {
+          "nrp": "5025251209",
+          "nama": "Marvel Timothy Noya"
+        },
+        {
+          "nrp": "5025251210",
+          "nama": "Fany Haikal Ahmad"
+        },
+        {
+          "nrp": "5025251211",
+          "nama": "Rizqi Ardiansyah Putra Pratama"
+        },
+        {
+          "nrp": "5025251212",
+          "nama": "Joel Angga Fransmartua Manalu"
+        },
+        {
+          "nrp": "5025251213",
+          "nama": "Ummi Kalsum Azzahra"
+        },
+        {
+          "nrp": "5025251214",
+          "nama": "Vijvika Nala Sanuratri"
+        },
+        {
+          "nrp": "5025251215",
+          "nama": "M Adhwa Athallah Tsani Anargya"
+        },
+        {
+          "nrp": "5025251216",
+          "nama": "Jessica Febiola"
+        },
+        {
+          "nrp": "5025251217",
+          "nama": "Syabil Zihni"
+        },
+        {
+          "nrp": "5025251218",
+          "nama": "Mushallina Dzikri Rozana"
+        },
+        {
+          "nrp": "5025251219",
+          "nama": "Farrel Fahrezi Rizvanala"
+        },
+        {
+          "nrp": "5025251221",
+          "nama": "Rachmat Ahzadel"
+        },
+        {
+          "nrp": "5025251222",
+          "nama": "I Dewa Nyoman Acarya Wibawantra"
+        },
+        {
+          "nrp": "5025251223",
+          "nama": "Sayyidah Fatimah Azzahrah Rakhmatullah"
+        },
+        {
+          "nrp": "5025251225",
+          "nama": "Fayyadh Ahmad Zuhri"
+        },
+        {
+          "nrp": "5025251226",
+          "nama": "Grandira Haidee Alexandro Letik"
+        },
+        {
+          "nrp": "5025251227",
+          "nama": "Khen Patra Yabes Sianipar"
+        },
+        {
+          "nrp": "5025251229",
+          "nama": "Muhammad Raffy Adika Putra Riyanto"
+        },
+        {
+          "nrp": "5025251230",
+          "nama": "Naila Hikaru"
+        },
+        {
+          "nrp": "5025251231",
+          "nama": "Nichola Matthew Hutabarat"
+        },
+        {
+          "nrp": "5025251232",
+          "nama": "Zidni Ammar Zadi"
+        },
+        {
+          "nrp": "5025251233",
+          "nama": "I Made Bagus Naratama Karangputra"
+        },
+        {
+          "nrp": "5025251234",
+          "nama": "Ahmad Fateh Eydil Faiq"
+        },
+        {
+          "nrp": "5025251235",
+          "nama": "Dhanishara Zaschya Putri Syamsudin"
+        },
+        {
+          "nrp": "5025251236",
+          "nama": "Gede Nararya Vatsa"
+        },
+        {
+          "nrp": "5025251237",
+          "nama": "Nur Handiena Deswinda Jefrimananda"
+        },
+        {
+          "nrp": "5025251238",
+          "nama": "Istaqim Makmun"
+        },
+        {
+          "nrp": "5025251239",
+          "nama": "Muhammad Faza Ismail"
+        },
+        {
+          "nrp": "5025251240",
+          "nama": "Medina Kusuma Prianda"
+        },
+        {
+          "nrp": "5025251241",
+          "nama": "Glenn Lucky Tangke Payung"
+        },
+        {
+          "nrp": "5025251242",
+          "nama": "Irsyad Ansyari Hakim"
+        },
+        {
+          "nrp": "5025251243",
+          "nama": "Irsyad Akbar"
+        },
+        {
+          "nrp": "5025251245",
+          "nama": "Hasna Nabila Hanim"
+        },
+        {
+          "nrp": "5025251246",
+          "nama": "Hamizan Rifqi Afandi"
+        },
+        {
+          "nrp": "5025251247",
+          "nama": "Gede Panji Dana Putra Ricedes"
+        },
+        {
+          "nrp": "5025251248",
+          "nama": "Maulana Bagas Rizqi Pratama"
+        },
+        {
+          "nrp": "5025251249",
+          "nama": "Enver Alif Wirawan"
+        },
+        {
+          "nrp": "5025251251",
+          "nama": "Mochammad Raja Defana"
+        },
+        {
+          "nrp": "5025251252",
+          "nama": "Matthew Adrian Putra"
+        },
+        {
+          "nrp": "5025251253",
+          "nama": "Darryl Ardan Wicaksono"
+        },
+        {
+          "nrp": "5025251254",
+          "nama": "Salsabila Shafadelarosa"
+        },
+        {
+          "nrp": "5025251255",
+          "nama": "Aghazy Setyo Nugroho"
+        },
+        {
+          "nrp": "5025251257",
+          "nama": "Rozan Hakim Abyandhono"
+        },
+        {
+          "nrp": "5025251258",
+          "nama": "Naila Sa'ada Cahyani"
+        },
+        {
+          "nrp": "5025251259",
+          "nama": "A.Deraya Meuthia Toja"
+        },
+        {
+          "nrp": "5025251260",
+          "nama": "Aqilah Ibrahim"
+        },
+        {
+          "nrp": "5025251262",
+          "nama": "Muhammad Rayza Buftiem"
+        },
+        {
+          "nrp": "5025251263",
+          "nama": "Raihan Ahmad Farraszaki"
+        },
+        {
+          "nrp": "5025251264",
+          "nama": "Ronald Ruben Sitopu"
+        },
+        {
+          "nrp": "5025251265",
+          "nama": "Affan Rafi Habibie"
+        },
+        {
+          "nrp": "5025251268",
+          "nama": "Safiya Nadira Az-Zahra"
+        },
+        {
+          "nrp": "5025251269",
+          "nama": "Daffa Arya Satyatma"
+        },
+        {
+          "nrp": "5025251270",
+          "nama": "Muhamad Alfareza Hariesa Pratama"
+        },
+        {
+          "nrp": "5025251272",
+          "nama": "Raka Rajendra Dipo Alam"
+        },
+        {
+          "nrp": "5025251273",
+          "nama": "Cokorda Bagus Laksmana Iswara"
+        },
+        {
+          "nrp": "5025251274",
+          "nama": "Hafuza Riffat"
+        },
+        {
+          "nrp": "5053251001",
+          "nama": "Rokhmatul Ilma Khanifa"
+        },
+        {
+          "nrp": "5053251002",
+          "nama": "Selly Aisyah"
+        },
+        {
+          "nrp": "5053251003",
+          "nama": "Aurelia Pradnyaswari Sanjaya Erawan"
+        },
+        {
+          "nrp": "5053251004",
+          "nama": "M. Khauzaky Amkanaky"
+        },
+        {
+          "nrp": "5053251005",
+          "nama": "Dheva Alvian Alfarizzy Excellent"
+        },
+        {
+          "nrp": "5053251006",
+          "nama": "Aurelia Nurdiansyah Putri"
+        },
+        {
+          "nrp": "5053251007",
+          "nama": "Abdul Ghofur Luqman Salim"
+        },
+        {
+          "nrp": "5053251008",
+          "nama": "Sulthan Zakinun Nasywa"
+        },
+        {
+          "nrp": "5053251009",
+          "nama": "Muchammad Naufal Aziz"
+        },
+        {
+          "nrp": "5053251011",
+          "nama": "Achmad Mirza Arzheta Rahman"
+        },
+        {
+          "nrp": "5053251012",
+          "nama": "Hilmi Taqiyuddin Haq"
+        },
+        {
+          "nrp": "5053251013",
+          "nama": "Hilmi Fauzi Adha Simamora"
+        },
+        {
+          "nrp": "5053251014",
+          "nama": "Muhammad Rafi Riansjah"
+        },
+        {
+          "nrp": "5053251015",
+          "nama": "Hafidz Nur Ikhsan Isnaeni"
+        },
+        {
+          "nrp": "5053251017",
+          "nama": "Daffa Randika"
+        },
+        {
+          "nrp": "5053251018",
+          "nama": "Mhd. Ravy Enstein Wahieda Elmunif"
+        },
+        {
+          "nrp": "5053251019",
+          "nama": "Muhammad Nafis Al Khalifi"
+        },
+        {
+          "nrp": "5053251020",
+          "nama": "Yuwand Arteta Hydri Wahyu Putra"
+        },
+        {
+          "nrp": "5053251021",
+          "nama": "Ahmad Zaidaan"
+        },
+        {
+          "nrp": "5053251022",
+          "nama": "Muhammad Hanif Nasrullah"
+        },
+        {
+          "nrp": "5053251023",
+          "nama": "Afrel Zharif Muflih"
+        },
+        {
+          "nrp": "5053251024",
+          "nama": "Nathan Alden"
+        },
+        {
+          "nrp": "5053251025",
+          "nama": "Muhammad Fakhry Ziyad Dhiyaulhaq"
+        },
+        {
+          "nrp": "5053251026",
+          "nama": "Safia Rashida Raya"
+        },
+        {
+          "nrp": "5053251027",
+          "nama": "Deara Briliana Putri"
+        },
+        {
+          "nrp": "5053251028",
+          "nama": "Yeremia Gunawan"
+        },
+        {
+          "nrp": "5053251029",
+          "nama": "Alvian Faza Wafda Reonaldi"
+        },
+        {
+          "nrp": "5053251030",
+          "nama": "La Ode Muhammad Ghofaruddin S"
+        },
+        {
+          "nrp": "5053251031",
+          "nama": "Muhammad Hisyam Nurdy"
+        },
+        {
+          "nrp": "5053251032",
+          "nama": "Daniel Dhaniswara"
+        },
+        {
+          "nrp": "5053251033",
+          "nama": "Vincent Anindito Priyamboddo"
+        },
+        {
+          "nrp": "5053251034",
+          "nama": "Nabila Ainiya Rahman"
+        },
+        {
+          "nrp": "5053251035",
+          "nama": "Azendra Kenar Arviant"
+        },
+        {
+          "nrp": "5053251036",
+          "nama": "Farrel Aryasatya Raharjo"
+        },
+        {
+          "nrp": "5053251038",
+          "nama": "Marsya Safina Maulidiyah"
+        },
+        {
+          "nrp": "5053251039",
+          "nama": "Devin Faza Raditya"
+        },
+        {
+          "nrp": "5053251040",
+          "nama": "Muhammad Zaydan Anugrah Pratama"
+        },
+        {
+          "nrp": "5053251041",
+          "nama": "Moch Siril Wafa Zidane Feliano"
+        },
+        {
+          "nrp": "5053251042",
+          "nama": "Ahmad Balya Malkan"
+        },
+        {
+          "nrp": "5053251043",
+          "nama": "Muhammad Farel Al Farisi"
+        },
+        {
+          "nrp": "5053251044",
+          "nama": "Fauzan Hasyim"
+        },
+        {
+          "nrp": "5053251045",
+          "nama": "Dzakwan Ghonim Fath'han Mubina"
+        },
+        {
+          "nrp": "5053251046",
+          "nama": "Reifan Al-Fattii Cahyadewa"
+        },
+        {
+          "nrp": "5053251047",
+          "nama": "Achmad Raffi Darmawan"
+        },
+        {
+          "nrp": "5053251048",
+          "nama": "Rilo Zidane Afrianta Tambunan"
+        },
+        {
+          "nrp": "5053251049",
+          "nama": "Matahari Gracio Sinaga"
+        },
+        {
+          "nrp": "5053251050",
+          "nama": "Reza"
+        },
+        {
+          "nrp": "5054251001",
+          "nama": "Benedictus Ryu Gunawan"
+        },
+        {
+          "nrp": "5054251002",
+          "nama": "Aziz Rahmad Arifin"
+        },
+        {
+          "nrp": "5054251003",
+          "nama": "Firdaus Mangkona"
+        },
+        {
+          "nrp": "5054251004",
+          "nama": "Muhammad Azka Ananta Khairon"
+        },
+        {
+          "nrp": "5054251006",
+          "nama": "Muhammad Fasya Atthaya Rosyada"
+        },
+        {
+          "nrp": "5054251008",
+          "nama": "Hilal Tsabitul Azmi Arba'i"
+        },
+        {
+          "nrp": "5054251009",
+          "nama": "Pranaja Adyatma Budiman"
+        },
+        {
+          "nrp": "5054251010",
+          "nama": "Rakha Makarim"
+        },
+        {
+          "nrp": "5054251011",
+          "nama": "Maria Putu Evelyne Corena Puryatma"
+        },
+        {
+          "nrp": "5054251013",
+          "nama": "Evina Fitriyani"
+        },
+        {
+          "nrp": "5054251014",
+          "nama": "Muhammad Rafie Safaraz Barus"
+        },
+        {
+          "nrp": "5054251015",
+          "nama": "Fahmi Alfayadh"
+        },
+        {
+          "nrp": "5054251016",
+          "nama": "Vincent Valentino"
+        },
+        {
+          "nrp": "5054251017",
+          "nama": "Rafa Rizki Aira Swala"
+        },
+        {
+          "nrp": "5054251018",
+          "nama": "Dinnetza Araafya Yudetti"
+        },
+        {
+          "nrp": "5054251019",
+          "nama": "Rasya Arya Ramadhan"
+        },
+        {
+          "nrp": "5054251020",
+          "nama": "Sandi Suryo Nugroho"
+        },
+        {
+          "nrp": "5054251021",
+          "nama": "Muhammad Fardan Hafidz"
+        },
+        {
+          "nrp": "5054251022",
+          "nama": "Daffa Aufa Afif"
+        },
+        {
+          "nrp": "5054251023",
+          "nama": "Zico Diego Rio Ramadhonny"
+        },
+        {
+          "nrp": "5054251024",
+          "nama": "Muhammad Irzam Hafis Fabiansyah"
+        },
+        {
+          "nrp": "5054251025",
+          "nama": "Rayyan Binar Ramadhan"
+        },
+        {
+          "nrp": "5054251026",
+          "nama": "Jonathan Joyo Wibowo"
+        },
+        {
+          "nrp": "5054251027",
+          "nama": "Faiz Farrosian Karim"
+        },
+        {
+          "nrp": "5054251028",
+          "nama": "Malfino Muhammad Willianz"
+        },
+        {
+          "nrp": "5054251029",
+          "nama": "Intifada Afkar Lazain Muhammad"
+        },
+        {
+          "nrp": "5054251030",
+          "nama": "Raihan Nurhakim"
+        },
+        {
+          "nrp": "5054251032",
+          "nama": "Rasya Gonawi"
+        },
+        {
+          "nrp": "5054251033",
+          "nama": "Levina Zahrathul Huda"
+        },
+        {
+          "nrp": "5054251035",
+          "nama": "Fauzan Tamma Harish Kunfaza"
+        },
+        {
+          "nrp": "5054251036",
+          "nama": "Prima Surya Nusantara"
+        },
+        {
+          "nrp": "5054251037",
+          "nama": "Lioneil Diyoel Trystan Tikupadang"
+        },
+        {
+          "nrp": "5054251039",
+          "nama": "Muhammad Dzaky Haidar"
+        },
+        {
+          "nrp": "5054251041",
+          "nama": "Maulana Rhys Pradana"
+        },
+        {
+          "nrp": "5054251042",
+          "nama": "Muhammad Farid Wijdan"
+        },
+        {
+          "nrp": "5054251044",
+          "nama": "Ahmad Zaki Fauzan Nabil"
+        },
+        {
+          "nrp": "5054251045",
+          "nama": "Mahardika Indra Pratama Ilyasa"
+        },
+        {
+          "nrp": "5054251046",
+          "nama": "Suhail Ainur Rofiq"
+        },
+        {
+          "nrp": "5054251047",
+          "nama": "A. Toriq Azhar"
+        },
+        {
+          "nrp": "5054251048",
+          "nama": "Sulaiman Faiz Tsaqib"
+        },
+        {
+          "nrp": "5054251050",
+          "nama": "Kadek Nathania Gavrila Astika"
+        },
+        {
+          "nrp": "5054251051",
+          "nama": "Rayyan Muhtar Ali"
+        }
+      ];
+      const inputNama = document.getElementById("nama");
+      const inputNrp = document.getElementById("nrp");
+      const saran = document.getElementById("saran");
+      inputNama.addEventListener("input", () => {
+        const kata = inputNama.value.trim().toLowerCase();
+        saran.innerHTML = "";
+        if (!kata) {
+          saran.style.display = "none";
+          return;
+        }
+        const cocok = dataMahasiswa.filter(m => m.nama.toLowerCase().includes(kata)).slice(0, 8);
+        if (cocok.length === 0) {
+          saran.style.display = "none";
+          return;
+        }
+        cocok.forEach(m => {
+          const item = document.createElement("div");
+          item.innerHTML = m.nama + "<small>" + m.nrp + "</small>";
+          item.addEventListener("click", () => {
+            inputNama.value = m.nama;
+            inputNrp.value = m.nrp;
+            saran.style.display = "none";
+          });
+          saran.appendChild(item);
+        });
+        saran.style.display = "block";
+      });
+      document.addEventListener("click", e => {
+        if (!e.target.closest(".field")) saran.style.display = "none";
+      });
+
+      function setError(id, pesan) {
+        document.getElementById("err-" + id).textContent = pesan;
+        document.getElementById(id).classList.toggle("invalid", pesan !== "");
+        return pesan === "";
+      }
+      document.getElementById("form").addEventListener("submit", e => {
+        e.preventDefault();
+        const nama = inputNama.value.trim();
+        const email = document.getElementById("email").value.trim();
+        const nrp = inputNrp.value.trim();
+        const matkul = document.getElementById("matkul").value.trim();
+        const dosen = document.getElementById("dosen").value.trim();
+        let valid = true;
+        valid = setError("nama", nama ? "" : "Nama tidak boleh kosong") && valid;
+        valid = setError("email", !email ? "Email tidak boleh kosong" : !email.includes("@") ? "Email harus mengandung @" : "") && valid;
+        valid = setError("nrp", /^\d{10}$/.test(nrp) ? "" : "NRP harus 10 digit angka") && valid;
+        valid = setError("matkul", matkul ? "" : "Mata kuliah tidak boleh kosong") && valid;
+        valid = setError("dosen", dosen ? "" : "Nama dosen tidak boleh kosong") && valid;
+        document.getElementById("sukses").style.display = valid ? "block" : "none";
+      });
+    </script>
+    <div class="nav">
+      <a href="registrasi.html">Registrasi</a>
+      <a href="kodePos.html">Kode Pos</a>
+      <a href="dropdown.html">Dropdown</a>
+    </div>
+
+  </body>
+
+</html>
